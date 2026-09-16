@@ -143,4 +143,42 @@ describe("API Routing & JSON Contract Verification", () => {
     expect(res.headers.get("access-control-allow-origin")).toBe("*");
     expect(res.headers.get("access-control-allow-methods")).toContain("POST");
   });
+
+  it("8. clientEngine handles campaign creation and full workflow gracefully when server returns HTML", async () => {
+    const { clientEngine } = await import("../src/api/clientEngine");
+    const formData = new FormData();
+    formData.append("productName", "Fallback Hydro");
+    formData.append("productDescription", "Offline and static hosting compatible athletic formula.");
+    formData.append("targetAudience", "Endurance athletes");
+    formData.append("campaignObjective", "Product Launch");
+    formData.append("tone", "Bold");
+    formData.append("cta", "Order Now");
+
+    const campaign = await clientEngine.createCampaign(formData);
+    expect(campaign).toHaveProperty("id");
+    expect(campaign.productName).toBe("Fallback Hydro");
+    expect(campaign.status).toBe("DRAFT");
+
+    // Test research
+    const resRes = await clientEngine.runResearch(campaign.id);
+    expect(resRes.campaign.status).toBe("RESEARCH_READY");
+    expect(resRes.research.sources.length).toBeGreaterThanOrEqual(3);
+
+    // Test angles
+    const angles = await clientEngine.getAngles(campaign.id);
+    expect(angles.length).toBe(3);
+
+    // Select angle
+    const sel = await clientEngine.selectAngle(campaign.id, angles[0].id);
+    expect(sel.campaign.status).toBe("ANGLE_SELECTED");
+
+    // Spec
+    const spec = await clientEngine.generateSpec(campaign.id);
+    expect(spec.version).toBe(1);
+
+    // Asset generation
+    const assetsCamp = await clientEngine.generateAssets(campaign.id);
+    expect(assetsCamp.status).toBe("COMPLETED");
+    expect(assetsCamp.assets?.length).toBe(3);
+  });
 });

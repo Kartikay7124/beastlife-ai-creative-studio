@@ -20,6 +20,15 @@ export function createApp(): express.Application {
     next();
   });
 
+  // Support reverse proxy and serverless original URI headers (e.g. Vercel, Cloud Run, API Gateway)
+  app.use((req, _res, next) => {
+    const original = (req.headers["x-forwarded-uri"] || req.headers["x-matched-path"] || req.headers["x-original-uri"]) as string;
+    if (original && original.startsWith("/api") && req.url !== original) {
+      req.url = original;
+    }
+    next();
+  });
+
   // JSON body parser with generous limit for data
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
