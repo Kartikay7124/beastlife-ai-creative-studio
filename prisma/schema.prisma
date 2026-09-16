@@ -1,0 +1,119 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Campaign {
+  id                 String           @id @default(cuid())
+  name               String
+  productName        String
+  productDescription String
+  targetAudience     String
+  campaignObjective  String
+  tone               String
+  cta                String
+  verifiedClaims     String?
+  productImagePath   String?
+  status             String           @default("DRAFT")
+  selectedAngleId    String?
+  researchSummary    String?
+  creativeNotes      String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  researchSources    ResearchSource[]
+  angles             CreativeAngle[]
+  creativeSpecs      CreativeSpec[]
+  assets             Asset[]
+  workflowStages     WorkflowStage[]
+  activityEvents     ActivityEvent[]
+}
+
+model ResearchSource {
+  id         String   @id @default(cuid())
+  campaignId String
+  title      String
+  url        String
+  domain     String
+  accessedAt DateTime @default(now())
+  summary    String
+  excerpt    String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CreativeAngle {
+  id              String   @id @default(cuid())
+  campaignId      String
+  angleNumber     Int
+  name            String
+  audienceInsight String
+  hook            String
+  visualDirection String
+  rationale       String
+  sourceIds       String   @default("[]")
+  createdAt       DateTime @default(now())
+  campaign        Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CreativeSpec {
+  id              String   @id @default(cuid())
+  campaignId      String
+  version         Int      @default(1)
+  hook            String
+  approvedCopy    String
+  cta             String
+  productIdentity String
+  approvedClaims  String   @default("[]")
+  scene           String
+  palette         String   @default("[]")
+  composition     String
+  typography      String
+  visualTreatment String
+  videoOutline    String   @default("[]")
+  createdAt       DateTime @default(now())
+  campaign        Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model Asset {
+  id         String   @id @default(cuid())
+  campaignId String
+  type       String   // IMAGE_SQUARE, IMAGE_VERTICAL, VIDEO_VERTICAL
+  format     String   // PNG, MP4
+  width      Int
+  height     Int
+  duration   Float?
+  filePath   String
+  provider   String   // fixture, gemini, ffmpeg
+  status     String   @default("PENDING") // PENDING, PROCESSING, READY, FAILED
+  error      String?
+  createdAt  DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model WorkflowStage {
+  id          String    @id @default(cuid())
+  campaignId  String
+  stage       String    // RESEARCH, ANGLES, SPEC, IMAGE_SQUARE, IMAGE_VERTICAL, VIDEO_VERTICAL
+  status      String    @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  startedAt   DateTime?
+  completedAt DateTime?
+  retryCount  Int       @default(0)
+  error       String?
+  metadata    String?
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model ActivityEvent {
+  id         String   @id @default(cuid())
+  campaignId String
+  eventType  String
+  message    String
+  stage      String?
+  details    String?
+  createdAt  DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
