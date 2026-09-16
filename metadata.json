@@ -2,6 +2,7 @@
   "name": "BEASTLIFE AI CREATIVE STUDIO",
   "description": "A creative studio where a user enters a product brief and the system turns it into a researched campaign and coordinated creative assets.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
-

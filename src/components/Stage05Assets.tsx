@@ -270,7 +270,7 @@ export const Stage05Assets: React.FC<Stage05AssetsProps> = ({ campaign, onCampai
             <div className="aspect-square rounded-xl bg-black overflow-hidden border border-neutral-800 flex items-center justify-center relative group">
               {squareAsset ? (
                 <img
-                  src={squareAsset.filePath}
+                  src={api.resolveAssetUrl(squareAsset.filePath)}
                   alt="Square Ad"
                   className="w-full h-full object-cover transition-transform group-hover:scale-102 duration-300"
                 />
@@ -286,7 +286,7 @@ export const Stage05Assets: React.FC<Stage05AssetsProps> = ({ campaign, onCampai
           <div className="mt-4 pt-4 border-t border-neutral-800/80">
             {squareAsset ? (
               <a
-                href={`/api/assets/${squareAsset.id}/download`}
+                href={api.resolveAssetUrl(`/api/assets/${squareAsset.id}/download`)}
                 download
                 className="w-full py-2.5 px-4 rounded-xl font-display font-bold text-xs bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 transition-colors flex items-center justify-center gap-2"
               >
@@ -314,7 +314,7 @@ export const Stage05Assets: React.FC<Stage05AssetsProps> = ({ campaign, onCampai
             <div className="aspect-[9/16] max-h-[440px] mx-auto rounded-xl bg-black overflow-hidden border border-neutral-800 flex items-center justify-center relative group">
               {verticalAsset ? (
                 <img
-                  src={verticalAsset.filePath}
+                  src={api.resolveAssetUrl(verticalAsset.filePath)}
                   alt="Story Ad"
                   className="w-full h-full object-cover transition-transform group-hover:scale-102 duration-300"
                 />
@@ -341,7 +341,7 @@ export const Stage05Assets: React.FC<Stage05AssetsProps> = ({ campaign, onCampai
           <div className="mt-4 pt-4 border-t border-neutral-800/80">
             {verticalAsset ? (
               <a
-                href={`/api/assets/${verticalAsset.id}/download`}
+                href={api.resolveAssetUrl(`/api/assets/${verticalAsset.id}/download`)}
                 download
                 className="w-full py-2.5 px-4 rounded-xl font-display font-bold text-xs bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 transition-colors flex items-center justify-center gap-2"
               >
@@ -369,7 +369,7 @@ export const Stage05Assets: React.FC<Stage05AssetsProps> = ({ campaign, onCampai
             <div className="aspect-[9/16] max-h-[440px] mx-auto rounded-xl bg-black overflow-hidden border border-neutral-800 flex items-center justify-center relative">
               {videoAsset ? (
                 <video
-                  src={videoAsset.filePath}
+                  src={api.resolveAssetUrl(videoAsset.filePath)}
                   controls
                   autoPlay
                   muted
@@ -389,7 +389,7 @@ export const Stage05Assets: React.FC<Stage05AssetsProps> = ({ campaign, onCampai
           <div className="mt-4 pt-4 border-t border-neutral-800/80">
             {videoAsset ? (
               <a
-                href={`/api/assets/${videoAsset.id}/download`}
+                href={api.resolveAssetUrl(`/api/assets/${videoAsset.id}/download`)}
                 download
                 className="w-full py-2.5 px-4 rounded-xl font-display font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-semibold transition-colors flex items-center justify-center gap-2"
               >
