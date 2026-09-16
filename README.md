@@ -225,6 +225,30 @@ npm run start
 
 ---
 
+## Production Deployment & Containerization
+
+### Unified Single-Service Deployment
+The frontend and backend do **not** need to be deployed separately. In production:
+1. `npm run build` runs `prisma generate`, builds the static Vite React SPA into `dist/`, and bundles the Express server using esbuild into `dist/server.cjs`.
+2. `npm start` (`node dist/server.cjs`) boots the Express server on port 3000, which handles `/api/*` routes, serves static assets from `public/`, and serves `dist/index.html` for client-side routing.
+
+### Docker Deployment
+A production-ready `Dockerfile` and `.dockerignore` are included in the repository root.
+```bash
+# Build Docker image
+docker build -t beastlife-studio .
+
+# Run Docker container with local volume for persistence
+docker run -p 3000:3000 \
+  -e GEMINI_API_KEY="your-key-here" \
+  -e AI_PROVIDER="gemini" \
+  -v $(pwd)/dev.db:/app/dev.db \
+  -v $(pwd)/public/generated:/app/public/generated \
+  beastlife-studio
+```
+
+---
+
 ## Environment Variables
 
 | Variable | Required | Default | Description |

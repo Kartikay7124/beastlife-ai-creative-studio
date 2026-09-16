@@ -17,7 +17,9 @@ tmp/
 temp/
 scratch/
 storage/temp/
+!storage/temp/.gitkeep
 *.tmp
+!.gitkeep
 
 .DS_Store
 *.log
